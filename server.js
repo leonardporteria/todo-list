@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.sendFile("./src/index.html", { root: __dirname });
 });
 
-// DEFAULT ENDPOINT
+// GET ALL USERS
 app.get("/todos", (req, res) => {
   let users = [];
 
@@ -33,6 +33,8 @@ app.get("/todos", (req, res) => {
     .catch((err) => {
       res.status(500).json({ error: err });
     });
+
+  console.log(req.body);
 });
 
 // GET BY ID
@@ -54,17 +56,24 @@ app.get("/todos/:id", (req, res) => {
 
 // POST
 app.post("/todos", (req, res) => {
-  const todo = req.body;
+  const user = req.body;
 
-  db.collection("todos")
-    .insertOne(todo)
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err });
-    });
+  createUser(user.username, user.password);
 });
+
+async function createUser(usernameRes, passwordRes) {
+  try {
+    const user = await User.create({
+      username: usernameRes,
+      password: passwordRes,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+    console.log(user);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 // DELETE BY ID
 app.delete("/todos/:id", (req, res) => {
@@ -104,23 +113,8 @@ app.patch("/todos/:id", (req, res) => {
     });
 });
 
-console.log(User);
-
 // HELPER FUNCTIONS
-async function createUser() {
-  try {
-    const user = await User.create({
-      username: "testUsername",
-      password: "testPassword",
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    });
-    console.log(user);
-  } catch (err) {
-    console.log(err);
-  }
-}
-createUser();
+
 async function addTodo(oId) {
   const updates = {
     todos: {
