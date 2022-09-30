@@ -1,0 +1,68 @@
+@import "variables";
+@import "globals";
+
+main {
+  display: flex;
+  flex-direction: column;
+  max-width: 80rem;
+  > h1 {
+    text-align: center;
+    font-size: 5rem;
+  }
+
+  label {
+    font-family: $POPPINS;
+    font-weight: $font-r;
+    font-size: 1rem;
+    color: $light;
+  }
+
+  input {
+    width: 20rem;
+    height: 3rem;
+    padding: 1rem;
+    border: 1px solid $black;
+    border-radius: 0.5rem;
+    background-color: $gray;
+    color: $light;
+  }
+
+  button {
+    cursor: pointer;
+    width: 7rem;
+    height: 3rem;
+    margin: auto;
+    border: 1px solid $white;
+    border-radius: 0.5rem;
+    background-color: $light;
+    font-family: $POPPINS;
+    font-weight: $font-m;
+    font-size: 1rem;
+    color: $dark;
+    &:hover {
+      box-shadow: 2px 1px 12px 3px $glow;
+    }
+  }
+
+  .forms {
+    display: flex;
+    gap: 10rem;
+    .register {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      &__title {
+        text-align: center;
+      }
+    }
+
+    .login {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      &__title {
+        text-align: center;
+      }
+    }
+  }
+}

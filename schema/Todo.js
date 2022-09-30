@@ -9,12 +9,13 @@ const todoListSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  username: { type: String, required: true },
+  username: String,
+  password: String,
   createdAt: Date,
   updatedAt: Date,
-  body: todoListSchema,
 });
 
-module.exports = mongoose.model("Todo", userSchema);
+module.exports = {
+  User: mongoose.model("User", userSchema, "todos"),
+  Todo: mongoose.model("Todo", todoListSchema, "todos"),
+};

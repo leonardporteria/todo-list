@@ -4,7 +4,7 @@ const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const Todo = require("./schema/Todo");
+const { User, Todo } = require("./schema/Todo");
 
 // db connection
 mongoose.connect("mongodb://localhost:27017/todo");
@@ -85,12 +85,9 @@ app.delete("/todos/:id", (req, res) => {
 
 // UPDATE BY ID
 app.patch("/todos/:id", (req, res) => {
-  // process
-  // > remove old todo object by id
-  // > create new todo schema
-  // > add to the collection
-
   const updates = req.body;
+
+  addTodo(ObjectId(req.params.id));
 
   if (!ObjectId.isValid(req.params.id)) {
     res.status(500).json({ error: "object id invalid" });
@@ -107,45 +104,40 @@ app.patch("/todos/:id", (req, res) => {
     });
 });
 
+console.log(User);
+
 // HELPER FUNCTIONS
 async function createUser() {
   try {
-    const user = await Todo.create({
-      email: "test2@email.com",
-      password: "password",
-      username: "userUsername2",
+    const user = await User.create({
+      username: "testUsername",
+      password: "testPassword",
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      body: {
-        todo: "to do stuff2",
-        label: "important2",
-        description: "to do this stuff2",
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      },
     });
     console.log(user);
   } catch (err) {
     console.log(err);
   }
 }
+createUser();
+async function addTodo(oId) {
+  const updates = {
+    todos: {
+      todo: "test",
+      label: "test",
+      description: "test",
+    },
+  };
+  // push update
+  //pull old
 
-async function addTodo() {
-  try {
-    const user = await Users.create({
-      email: "test2@email.com",
-      password: "password",
-      username: "userUsername2",
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      body: {
-        todo: "to do stuff2",
-        label: "important2",
-        description: "to do this stuff2",
-      },
-    });
-    console.log(user);
-  } catch (err) {
-    console.log(err);
-  }
+  // db.collection("todos")
+  //   .updateOne({ _id: ObjectId(oId) }, { $set: updates })
+  //   .then((result) => {
+  //     res.status(200).json(result);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).json({ error: err });
+  //   });
 }
