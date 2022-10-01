@@ -15,7 +15,10 @@ app.listen(3000, () => console.log(`LISTENING AT PORT 3000...`));
 app.use(express.static("src"));
 app.use(express.json());
 
-// ROUTES
+// USER DETAILS
+let userData = {};
+
+// ROUTES =====================================================
 app.get("/", (req, res) => {
   res.sendFile("./src/index.html", { root: __dirname });
 });
@@ -33,8 +36,11 @@ app.get("/todos", (req, res) => {
     .catch((err) => {
       res.status(500).json({ error: err });
     });
+});
 
-  console.log(req.body);
+// GET LOGGED
+app.get("/getUser", (req, res) => {
+  res.status(200).json(userData);
 });
 
 // GET BY ID
@@ -54,84 +60,68 @@ app.get("/todos/:id", (req, res) => {
     });
 });
 
-// POST
-app.post("/todos", (req, res) => {
-  const user = req.body;
+// POST NEW USER
+app.post("/todos", async (req, res) => {
+  const userReq = req.body;
 
-  createUser(user.username, user.password);
-});
-
-async function createUser(usernameRes, passwordRes) {
   try {
     const user = await User.create({
-      username: usernameRes,
-      password: passwordRes,
+      username: userReq.username,
+      password: userReq.password,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
+    userData = user;
     console.log(user);
   } catch (err) {
     console.log(err);
   }
-}
 
-// DELETE BY ID
-app.delete("/todos/:id", (req, res) => {
-  if (!ObjectId.isValid(req.params.id)) {
-    res.status(500).json({ error: "object id invalid" });
-    return;
-  }
-
-  db.collection("todos")
-    .deleteOne({ _id: ObjectId(req.params.id) })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err });
-    });
+  console.log(userData);
 });
 
-// UPDATE BY ID
-app.patch("/todos/:id", (req, res) => {
-  const updates = req.body;
+// SAVE USE DATA TO SERVER
+app.post("/saveUser", (req, res) => {
+  const user = req.body;
+  userData = user;
 
-  addTodo(ObjectId(req.params.id));
-
-  if (!ObjectId.isValid(req.params.id)) {
-    res.status(500).json({ error: "object id invalid" });
-    return;
-  }
-
-  db.collection("todos")
-    .updateOne({ _id: ObjectId(req.params.id) }, { $set: updates })
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err });
-    });
+  console.log(userData);
 });
 
-// HELPER FUNCTIONS
-
-async function addTodo(oId) {
-  const updates = {
+// POST NEW TODO
+app.post("/todos/:id", (req, res) => {
+  const set = {
     todos: {
-      todo: "test",
-      label: "test",
-      description: "test",
+      content: req.body.content,
+      status: "unfinished",
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      _id: new mongoose.mongo.ObjectId(),
     },
   };
-  // push update
-  //pull old
 
-  // db.collection("todos")
-  //   .updateOne({ _id: ObjectId(oId) }, { $set: updates })
-  //   .then((result) => {
-  //     res.status(200).json(result);
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).json({ error: err });
-  //   });
-}
+  if (!ObjectId.isValid(req.params.id)) {
+    res.status(500).json({ error: "object id invalid" });
+    return;
+  }
+
+  db.collection("todos")
+    .updateOne({ _id: ObjectId(req.params.id) }, { $push: set })
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
+
+// PATCH TODO BY ID
+
+// URL PATH =====================================================
+app.get("/home", (req, res) => {
+  res.sendFile("./src/home.html", { root: __dirname });
+});
+
+app.use((req, res) => {
+  res.status(404).sendFile("./src/index.html", { root: __dirname });
+});

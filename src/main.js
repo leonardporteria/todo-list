@@ -49,11 +49,11 @@ registerBtn.addEventListener("click", async () => {
   // check for duplicate users
   if (hasUser) {
     regUsernameLabel.textContent = `Username Already Taken`;
-    regUsernameLabel.style.color = "red";
+    regUsernameLabel.style.color = "#ac1111";
     return;
   } else {
     regUsernameLabel.textContent = `Username Available`;
-    regUsernameLabel.style.color = "green";
+    regUsernameLabel.style.color = "#005813";
   }
 
   // check password if not empty
@@ -70,6 +70,8 @@ registerBtn.addEventListener("click", async () => {
     regPassLabel.textContent = "Too Long";
     return;
   }
+
+  location.replace("./home");
 
   const data = {
     username: usernameValue,
@@ -105,8 +107,7 @@ loginBtn.addEventListener("click", async () => {
   users.forEach((user) => {
     if (user.username === usernameValue) {
       isUser = true;
-      userDetails.username = user.username;
-      userDetails.password = user.password;
+      userDetails = user;
     }
   });
 
@@ -116,7 +117,7 @@ loginBtn.addEventListener("click", async () => {
     logUsernameLabel.style.color = "#f5f5f5";
   } else {
     logUsernameLabel.textContent = `Username does not exist`;
-    logUsernameLabel.style.color = "red";
+    logUsernameLabel.style.color = "#ac1111";
     return;
   }
 
@@ -129,9 +130,22 @@ loginBtn.addEventListener("click", async () => {
   // check password
   if (!(passwordValue === userDetails.password)) {
     logPassLabel.textContent = "Wrong Password!";
-    logPassLabel.style.color = "red";
+    logPassLabel.style.color = "#ac1111";
+    return;
   } else {
     logPassLabel.textContent = "Login Granted";
-    logPassLabel.style.color = "green";
+    logPassLabel.style.color = "#005813";
   }
+
+  location.replace("./home");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userDetails),
+  };
+  const response = await fetch("/saveUser", options);
+  console.log(response);
 });

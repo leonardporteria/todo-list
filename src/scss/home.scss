@@ -1,2 +1,100 @@
 @import "variables";
 @import "globals";
+
+body {
+  display: block;
+}
+
+.head {
+  height: 8rem;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  &__title {
+    margin: 0;
+    align-self: center;
+  }
+  &__nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-self: center;
+    &__username {
+      color: green;
+    }
+    &__logout {
+      color: red;
+    }
+    > p {
+      margin: 0;
+      justify-self: center;
+    }
+  }
+}
+
+main {
+  padding: 2rem;
+  margin: auto;
+  width: 80vw;
+  display: grid;
+  grid-template-columns: 4.5fr 0.5fr;
+  > input {
+    height: 3rem;
+    padding: 1rem;
+    border: 1px solid $black;
+    border-radius: 0.5rem 0 0 0.5rem;
+    font-family: $POPPINS;
+    font-weight: $font-r;
+    background-color: $gray;
+    color: $light;
+  }
+  > button {
+    cursor: pointer;
+    height: 3rem;
+    border: 1px solid $black;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: $light;
+    font-family: $POPPINS;
+    font-weight: $font-m;
+    font-size: 1.5rem;
+    color: $dark;
+  }
+}
+
+.todos {
+  padding: 2rem;
+  margin: auto;
+  width: 80vw;
+  display: grid;
+  gap: 1rem;
+  .todo {
+    display: grid;
+    grid-template-columns: 1fr repeat(3, 0.11fr);
+    &__content {
+      padding: 1rem;
+      background-color: $gray;
+    }
+    &__done {
+      cursor: pointer;
+      text-align: center;
+      align-self: center;
+      background-color: $green;
+    }
+    &__edit {
+      cursor: pointer;
+      text-align: center;
+      align-self: center;
+      background-color: $yellow;
+    }
+    &__delete {
+      cursor: pointer;
+      text-align: center;
+      align-self: center;
+      background-color: $red;
+    }
+    > p {
+      padding: 1rem;
+      margin: 0;
+      align-self: center;
+    }
+  }
+}
