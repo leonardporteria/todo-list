@@ -10,7 +10,10 @@ const todosParent = document.querySelector(".todos");
 async function loadUser() {
   const user = await fetch("/getUser");
   const json = await user.json();
-  return json;
+
+  const userData = await fetch(`/todos/${json._id}`);
+  const jsonData = await userData.json();
+  return jsonData;
 }
 
 // SUBMIT TODO EVENT LISTENER ======================================
@@ -27,6 +30,8 @@ addTodoButton.addEventListener("click", async () => {
 async function loadTodos() {
   const user = await loadUser();
   console.log(user);
+
+  usernameElement.textContent = user.username;
 
   if (!user.todos) return;
 
