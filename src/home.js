@@ -24,6 +24,20 @@ addTodoButton.addEventListener("click", async () => {
 
   addTodo(todoContent);
   addTodoDOM(todoContent);
+  setEventListeners();
+});
+
+// logout button
+logoutButton.addEventListener("click", async () => {
+  location.replace("/");
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ _id: "" }),
+  };
+  await fetch("/saveUser", options);
 });
 
 // FETCH TODOS ====================================================
@@ -32,10 +46,13 @@ async function loadTodos() {
   console.log(user);
 
   usernameElement.textContent = user.username;
+  document.title = `TODO LIST | ${user.username}`;
 
   if (!user.todos) return;
 
   user.todos.forEach((todo) => addTodoDOM(todo.content));
+
+  setEventListeners();
 }
 loadTodos();
 
@@ -85,11 +102,81 @@ function addTodoDOM(todoContent) {
   todosParent.appendChild(todo);
 }
 
-// TODO: FETCH TODOS IN COLLECTION IF HAS TODOS
-// TODO: ADD TODO IF DOESNT HAVE TODO
-// TODO: FETCH ALL TODOS IN THE COLLECTION
-// TODO: RENDER IN DOM
+// EDIT TODOS
+async function setEventListeners() {
+  doneTodo();
+  editTodo();
+  deleteTodo();
+}
 
-// const userData = await fetch(`/todos/${json._id}`);
-// const jsonData = await userData.json();
-// console.log(jsonData);
+// UPDATE STATUS TODO CONTENT [DONE TODO]
+async function doneTodo() {
+  const user = await loadUser();
+  const doneTodoElements = document.querySelectorAll(".todo__done");
+
+  const status = "finished";
+
+  const options = {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+    headers: {
+      "Content-type": "application/json",
+    },
+  };
+
+  console.log("done todo");
+
+  // EDIT EVENT LISTENER
+  for (let i = 0; i < user.todos.length; i++) {
+    doneTodoElements[i].addEventListener("click", async () => {
+      console.log("done", user.todos[i]._id);
+      await fetch(`/todos/status/${user._id}/${user.todos[i]._id}`, options);
+    });
+  }
+}
+
+// EDIT TODO CONTENT [EDIT TODO]
+async function editTodo() {
+  const user = await loadUser();
+  const editTodoElements = document.querySelectorAll(".todo__edit");
+
+  const content = "edit langs";
+
+  const options = {
+    method: "PATCH",
+    body: JSON.stringify({ content }),
+    headers: {
+      "Content-type": "application/json",
+    },
+  };
+
+  console.log("edit todo");
+
+  // EDIT EVENT LISTENER
+  for (let i = 0; i < user.todos.length; i++) {
+    editTodoElements[i].addEventListener("click", async () => {
+      console.log("edit", user.todos[i]._id);
+      await fetch(`/todos/content/${user._id}/${user.todos[i]._id}`, options);
+    });
+  }
+}
+
+// DELETE TODO [DELETE TODO]
+async function deleteTodo() {
+  const user = await loadUser();
+  const deleteTodoElements = document.querySelectorAll(".todo__delete");
+
+  const options = {
+    method: "DELETE",
+  };
+
+  console.log("delete todo");
+
+  // EDIT EVENT LISTENER
+  for (let i = 0; i < user.todos.length; i++) {
+    deleteTodoElements[i].addEventListener("click", async () => {
+      console.log("delete", user.todos[i]._id);
+      await fetch(`/todos/delete/${user._id}/${user.todos[i]._id}`, options);
+    });
+  }
+}

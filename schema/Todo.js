@@ -1,13 +1,5 @@
 const mongoose = require("mongoose");
 
-const todoListSchema = new mongoose.Schema({
-  todo: String,
-  label: String,
-  description: String,
-  createdAt: Date,
-  updatedAt: Date,
-});
-
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -17,5 +9,4 @@ const userSchema = new mongoose.Schema({
 
 module.exports = {
   User: mongoose.model("User", userSchema, "todos"),
-  Todo: mongoose.model("Todo", todoListSchema, "todos"),
 };

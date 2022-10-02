@@ -19,9 +19,11 @@ body {
     grid-template-columns: 1fr 1fr;
     align-self: center;
     &__username {
-      color: green;
+      font-weight: $font-l;
+      color: $light;
     }
     &__logout {
+      cursor: pointer;
       color: red;
     }
     > p {
