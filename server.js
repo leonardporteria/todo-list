@@ -16,7 +16,7 @@ app.use(express.static("src"));
 app.use(express.json());
 
 // USER DETAILS
-let userData = {};
+let userId = {};
 
 // ROUTES =====================================================
 app.get("/", (req, res) => {
@@ -39,8 +39,8 @@ app.get("/todos", (req, res) => {
 });
 
 // GET LOGGED
-app.get("/getUser", (req, res) => {
-  res.status(200).json(userData);
+app.get("/getUserId", (req, res) => {
+  res.status(200).json(userId);
 });
 
 // GET BY ID
@@ -71,21 +71,21 @@ app.post("/todos", async (req, res) => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
-    userData = user;
+    userId = user._id;
     console.log(user);
   } catch (err) {
     console.log(err);
   }
 
-  console.log(userData);
+  console.log(userId);
 });
 
 // SAVE USE DATA TO SERVER
 app.post("/saveUser", (req, res) => {
   const user = req.body;
-  userData = user;
+  userId = user._id;
 
-  console.log(userData);
+  console.log(userId);
 });
 
 // POST NEW TODO

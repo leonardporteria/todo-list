@@ -8,10 +8,10 @@ const todosParent = document.querySelector(".todos");
 
 // LOAD USER DETAILS
 async function loadUser() {
-  const user = await fetch("/getUser");
+  const user = await fetch("/getUserId");
   const json = await user.json();
 
-  const userData = await fetch(`/todos/${json._id}`);
+  const userData = await fetch(`/todos/${json}`);
   const jsonData = await userData.json();
   return jsonData;
 }
