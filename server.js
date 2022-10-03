@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const { User } = require("./schema/Todo");
+const MONGODB_URI = process.env.MONGOATLAS_CONNECTION;
 
 // db connection
 mongoose.connect("mongodb://localhost:27017/todo");
