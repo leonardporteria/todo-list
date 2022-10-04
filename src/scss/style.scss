@@ -1,5 +1,6 @@
 @import "variables";
 @import "globals";
+@import "mixins";
 
 main {
   display: flex;
@@ -49,6 +50,55 @@ main {
   .forms {
     display: flex;
     gap: 10rem;
+    .register {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      &__title {
+        text-align: center;
+      }
+    }
+
+    .login {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      &__title {
+        text-align: center;
+      }
+    }
+  }
+}
+@include breakpoint-down(small) {
+  .forms {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .register {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      &__title {
+        text-align: center;
+      }
+    }
+
+    .login {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      &__title {
+        text-align: center;
+      }
+    }
+  }
+}
+
+@include breakpoint-down(medium) {
+  .forms {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     .register {
       display: flex;
       gap: 1rem;

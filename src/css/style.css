@@ -89,3 +89,50 @@ main .forms .login {
 main .forms .login__title {
   text-align: center;
 }
+
+@media (max-width: 39.9375em) {
+  .forms {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .forms .register {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .forms .register__title {
+    text-align: center;
+  }
+  .forms .login {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .forms .login__title {
+    text-align: center;
+  }
+}
+@media (max-width: 63.9375em) {
+  .forms {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .forms .register {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .forms .register__title {
+    text-align: center;
+  }
+  .forms .login {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  .forms .login__title {
+    text-align: center;
+  }
+}
