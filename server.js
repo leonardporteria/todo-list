@@ -21,9 +21,9 @@ app.use(express.json());
 let userId = {};
 
 // ROUTES =====================================================
-app.get("/", (req, res) => {
-  res.sendFile("./src/index.html", { root: __dirname });
-});
+// app.get("/", (req, res) => {
+//   res.sendFile("./src/index.html", { root: __dirname });
+// });
 
 // GET API ===================================================
 // GET ALL USERS [for checking of user's existence]
