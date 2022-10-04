@@ -50,7 +50,7 @@ async function loadTodos() {
 
   if (!user.todos) return;
 
-  user.todos.forEach((todo) => addTodoDOM(todo.content));
+  user.todos.forEach((todo) => addTodoDOM(todo.content, todo.status));
 
   setEventListeners();
 }
@@ -76,7 +76,7 @@ async function addTodo(todoContent) {
 }
 
 // ADD TODO TO DOM
-function addTodoDOM(todoContent) {
+function addTodoDOM(todoContent, status) {
   const todo = document.createElement("div");
   const content = document.createElement("p");
   const doneButton = document.createElement("p");
@@ -93,6 +93,8 @@ function addTodoDOM(todoContent) {
   doneButton.textContent = "done";
   editButton.textContent = "edit";
   deleteButton.textContent = "delete";
+
+  if (status === "finished") content.style.color = "#ac1111";
 
   todo.appendChild(content);
   todo.appendChild(doneButton);
@@ -116,23 +118,19 @@ async function setEventListeners() {
 
 // UPDATE STATUS TODO CONTENT [DONE TODO]
 async function doneTodo(users) {
+  const editTodoElements = document.querySelectorAll(".todo__edit");
   const doneTodoElements = document.querySelectorAll(".todo__done");
-  const contentElement = document.querySelectorAll(".todo__content");
 
   // EDIT EVENT LISTENER
   for (let i = 0; i < users.todos.length; i++) {
     doneTodoElements[i].addEventListener("click", async () => {
-      const user = await loadUser();
+      if (editTodoElements[i].classList.contains("todo__editing")) {
+        return;
+      }
 
+      const user = await loadUser();
       const status =
         user.todos[i].status === "unfinished" ? "finished" : "unfinished";
-
-      // edit dom
-      if (status === "finished") {
-        contentElement[i].style.color = "red";
-      } else {
-        contentElement[i].style.color = "white";
-      }
 
       const options = {
         method: "PATCH",
@@ -144,6 +142,16 @@ async function doneTodo(users) {
 
       await fetch(`/todos/status/${user._id}/${user.todos[i]._id}`, options);
 
+      const contentElement = document.querySelectorAll(".todo__content");
+
+      console.log(status);
+      // edit dom
+      if (status === "finished") {
+        contentElement[i].style.color = "red";
+      } else {
+        contentElement[i].style.color = "white";
+      }
+
       console.log("done", user.todos[i]._id);
     });
   }
@@ -153,6 +161,7 @@ async function doneTodo(users) {
 async function editTodo(users) {
   const user = await loadUser();
   const editTodoElements = document.querySelectorAll(".todo__edit");
+  const overlay = document.querySelector(".overlay");
 
   const doneTodoElements = document.querySelectorAll(".todo__done");
   const deleteTodoElements = document.querySelectorAll(".todo__delete");
@@ -163,24 +172,13 @@ async function editTodo(users) {
     editTodoElements[i].addEventListener("click", async () => {
       editTodoElements[i].classList.toggle("todo__editing");
 
-      if (!editTodoElements[i].classList.contains("todo__editing")) {
-        const removeEditElement = document.querySelectorAll(
-          ".todo__edit__content"
-        );
-        // RESET TO OLD FEATURES
-        doneTodoElements[i].classList.remove("todo__edit__confirm");
-        deleteTodoElements[i].classList.remove("todo__edit__cancel");
-        contentElement[i].classList.remove("todo__edit__content");
-
-        doneTodoElements[i].classList.add("todo__done");
-        deleteTodoElements[i].classList.add("todo__delete");
-
-        removeEditElement[i].outerHTML = `<p class="todo__content">
-        ${user.todos[i].content}
-        </p>`;
-      } else {
-        const addEditElement = document.querySelectorAll(".todo__content");
+      if (editTodoElements[i].classList.contains("todo__editing")) {
         // ACTIVE EDITING
+        console.log("editing");
+        const addEditElement = document.querySelectorAll(".todo__content");
+        overlay.style.display = "block";
+
+        // classlist
         doneTodoElements[i].classList.remove("todo__done");
         deleteTodoElements[i].classList.remove("todo__delete");
         contentElement[i].classList.remove("todo__content");
@@ -189,10 +187,34 @@ async function editTodo(users) {
         deleteTodoElements[i].classList.add("todo__edit__cancel");
 
         addEditElement[i].outerHTML = `<input
-        type="text"
-        class="todo__edit__content"
-        placeholder="Editing ${user.todos[i].content}"
-      />`;
+             type="text"
+             class="todo__edit__content"
+             placeholder="Editing ${user.todos[i].content}"
+           />`;
+      } else {
+        // DISABLE EDITING
+        console.log("exit editing");
+        const removeEditElement = document.querySelector(
+          ".todo__edit__content"
+        );
+        overlay.style.display = "none";
+
+        // classlist
+        doneTodoElements[i].classList.remove("todo__edit__confirm");
+        deleteTodoElements[i].classList.remove("todo__edit__cancel");
+        contentElement[i].classList.remove("todo__edit__content");
+
+        doneTodoElements[i].classList.add("todo__done");
+        deleteTodoElements[i].classList.add("todo__delete");
+
+        removeEditElement[i].outerHTML = `<p class="todo__content">
+      ${user.todos[i].content}
+      </p>`;
+        const newTodo = document.querySelectorAll(".todo__content");
+        if (user.todos[i].status === "finished") {
+          console.log("red");
+          newTodo[i].style.color = "red";
+        }
       }
 
       const content = "edit langs";
@@ -214,12 +236,18 @@ async function editTodo(users) {
 
 // DELETE TODO [DELETE TODO]
 async function deleteTodo(users) {
+  const editTodoElements = document.querySelectorAll(".todo__edit");
+
   const deleteTodoElements = document.querySelectorAll(".todo__delete");
   const parentTodo = document.querySelectorAll(".todo");
 
   // EDIT EVENT LISTENER
   for (let i = 0; i < users.todos.length; i++) {
     deleteTodoElements[i].addEventListener("click", async () => {
+      if (editTodoElements[i].classList.contains("todo__editing")) {
+        return;
+      }
+
       parentTodo[i].remove();
 
       const options = {

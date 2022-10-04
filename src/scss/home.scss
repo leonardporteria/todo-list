@@ -3,6 +3,7 @@
 
 body {
   display: block;
+  position: relative;
 }
 
 .head {
@@ -98,5 +99,45 @@ main {
       margin: 0;
       align-self: center;
     }
+    &__edit__content {
+      z-index: 2;
+      padding: 0 1rem;
+      border: 1px solid $black;
+      font-family: $POPPINS;
+      font-weight: $font-r;
+      background-color: $gray;
+      color: $light;
+    }
+    &__edit__confirm {
+      z-index: 2;
+      cursor: pointer;
+      text-align: center;
+      align-self: center;
+      background-color: $green;
+    }
+    &__editing {
+      z-index: 2;
+      cursor: pointer;
+      text-align: center;
+      align-self: center;
+      background-color: $yellow;
+    }
+    &__edit__cancel {
+      z-index: 2;
+      cursor: pointer;
+      text-align: center;
+      align-self: center;
+      background-color: $red;
+    }
   }
+}
+
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
 }

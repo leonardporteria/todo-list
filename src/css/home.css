@@ -29,6 +29,7 @@ body {
 
 body {
   display: block;
+  position: relative;
 }
 
 .head {
@@ -125,4 +126,44 @@ main > button {
   padding: 1rem;
   margin: 0;
   align-self: center;
+}
+.todos .todo__edit__content {
+  z-index: 2;
+  padding: 0 1rem;
+  border: 1px solid #000000;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  background-color: #2b2b2b;
+  color: #f5f5f5;
+}
+.todos .todo__edit__confirm {
+  z-index: 2;
+  cursor: pointer;
+  text-align: center;
+  align-self: center;
+  background-color: #005813;
+}
+.todos .todo__editing {
+  z-index: 2;
+  cursor: pointer;
+  text-align: center;
+  align-self: center;
+  background-color: #948c1f;
+}
+.todos .todo__edit__cancel {
+  z-index: 2;
+  cursor: pointer;
+  text-align: center;
+  align-self: center;
+  background-color: #ac1111;
+}
+
+.overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
 }
