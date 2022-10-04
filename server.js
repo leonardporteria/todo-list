@@ -6,13 +6,14 @@ require("dotenv").config();
 
 const { User } = require("./schema/Todo");
 const MONGODB_URI = process.env.MONGOATLAS_CONNECTION;
+const PORT = process.env.PORT || 3000;
 
 // db connection
-mongoose.connect("mongodb://localhost:27017/todo");
+mongoose.connect(MONGODB_URI);
 const db = mongoose.connection;
 
 // express setup
-app.listen(3000, () => console.log(`LISTENING AT PORT 3000...`));
+app.listen(PORT, () => console.log(`LISTENING AT PORT 3000...`));
 app.use(express.static("src"));
 app.use(express.json());
 

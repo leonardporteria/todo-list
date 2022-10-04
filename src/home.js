@@ -26,7 +26,7 @@ addTodoButton.addEventListener("click", async () => {
 
   addTodo(todoContent);
   domEvents.addTodoDOM(todoContent);
-  domEvents.setEventListeners();
+  setEventListeners();
 });
 
 // logout button
@@ -43,7 +43,7 @@ logoutButton.addEventListener("click", async () => {
 });
 
 // FETCH TODOS ====================================================
-async function loadTodos() {
+export async function loadTodos() {
   const user = await loadUser();
   console.log(user);
 
@@ -53,10 +53,21 @@ async function loadTodos() {
   if (!user.todos) return;
 
   user.todos.forEach((todo) => domEvents.addTodoDOM(todo.content, todo.status));
-
-  domEvents.setEventListeners();
+  await setEventListeners();
 }
 loadTodos();
+
+// SET EVENT LISTENERS
+export async function setEventListeners() {
+  const user = await loadUser();
+
+  // return if no todo yet
+  if (!user.todos) return;
+
+  await domEvents.doneTodo();
+  await domEvents.editTodo();
+  await domEvents.deleteTodo();
+}
 
 // CREATE/ADD TODOS
 async function addTodo(todoContent) {

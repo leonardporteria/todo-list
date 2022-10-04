@@ -53,7 +53,7 @@ body {
 }
 .head__nav__logout {
   cursor: pointer;
-  color: red;
+  color: #ac1111;
 }
 .head__nav > p {
   margin: 0;

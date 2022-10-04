@@ -1,4 +1,4 @@
-import { loadUser } from "./home.js";
+import { loadUser, loadTodos, setEventListeners } from "./home.js";
 
 export class DomEvents {
   constructor() {
@@ -32,18 +32,6 @@ export class DomEvents {
     todo.appendChild(deleteButton);
 
     this.todosParent.appendChild(todo);
-  }
-
-  // SET EVENT LISTENERS
-  async setEventListeners() {
-    const user = await loadUser();
-
-    // return if no todo yet
-    if (!user.todos) return;
-
-    this.doneTodo(user);
-    this.editTodo(user);
-    this.deleteTodo(user);
   }
 
   // UPDATE STATUS TODO CONTENT [DONE TODO]
@@ -84,9 +72,9 @@ export class DomEvents {
         console.log(status);
         // edit dom
         if (status === "finished") {
-          contentElement[i].style.color = "red";
+          contentElement[i].style.color = "#ac1111";
         } else {
-          contentElement[i].style.color = "white";
+          contentElement[i].style.color = "#f5f5f5";
         }
       }
     }
@@ -119,11 +107,10 @@ export class DomEvents {
           `/todos/delete/${users._id}/${users.todos[i]._id}`,
           options
         );
-        this.setEventListeners();
+        document.querySelector(".todos").innerHTML = "";
+        loadTodos();
         console.log("delete", users.todos[i]._id);
       }
-
-      // TODO: DISABLE EVENT LISTENER
     }
   }
 
@@ -170,10 +157,6 @@ export class DomEvents {
           const editInput = document.querySelector(".todo__edit__content");
           const editConfirm = document.querySelector(".todo__edit__confirm");
           const editCancel = document.querySelector(".todo__edit__cancel");
-
-          console.log(editInput);
-          console.log(editConfirm);
-          console.log(editCancel);
 
           editInput.addEventListener("change", (e) => {
             content = e.target.value;
@@ -261,7 +244,6 @@ export class DomEvents {
           // set done status
           const setDoneStatus = document.querySelectorAll(".todo__content");
           if (user.todos[i].status === "finished") {
-            console.log("red");
             setDoneStatus[i].style.color = "red";
           }
         }
